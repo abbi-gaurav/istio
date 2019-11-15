@@ -1,6 +1,6 @@
 RELEASE?=0.0.1
 APP?=mygrpcadapter
-GOOS?=linux
+GOOS?=darwin
 GOARCH?=amd64
 DOCKER_ACCOUNT?=gabbi
 CONTAINER_IMAGE?=${DOCKER_ACCOUNT}/${APP}
@@ -15,7 +15,7 @@ test:
 	go test -v -race ./...
 
 build: clean vet test
-	CGO_ENABLED=0 GOOS=${GOOS} GOARCH=${GOARCH} go build -o ${APP} ./...
+	CGO_ENABLED=0 GOOS=${GOOS} GOARCH=${GOARCH} go build -a -installsuffix cgo -v -o ${APP} cmd/main.go
 
 build-image: build
 	docker build -t $(CONTAINER_IMAGE):$(RELEASE) .
