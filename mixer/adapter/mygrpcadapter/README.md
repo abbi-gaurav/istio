@@ -80,4 +80,5 @@ Install a custom Istio adapter to a Kyma cluster.
 |---------|-----------------------------------------------------------------|
 | 0.0.1   | A working version installed on Kyma based on walk through guide |
 | 0.0.2   | Stop writing to a file. Only print to console                   |
+| 0.0.3   | Migrate to go modules                                           |
 

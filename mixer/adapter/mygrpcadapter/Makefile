@@ -1,4 +1,4 @@
-RELEASE?=0.0.2
+RELEASE?=0.0.3
 APP?=mygrpcadapter
 GOOS?=darwin
 GOARCH?=amd64
@@ -9,13 +9,13 @@ clean:
 	rm -rf ${APP}
 
 vet:
-	go vet .
+	GO111MODULE=on go vet .
 
 test:
-	go test -v -race ./...
+	GO111MODULE=on go test -v -race ./...
 
 build: clean vet test
-	CGO_ENABLED=0 GOOS=${GOOS} GOARCH=${GOARCH} go build -a -installsuffix cgo -v -o ${APP} cmd/main.go
+	GO111MODULE=on CGO_ENABLED=0 GOOS=${GOOS} GOARCH=${GOARCH} go build -a -installsuffix cgo -v -o ${APP} cmd/main.go
 
 build-image: build
 	docker build -t $(CONTAINER_IMAGE):$(RELEASE) .
