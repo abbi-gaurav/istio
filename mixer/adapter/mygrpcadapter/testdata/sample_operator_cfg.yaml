@@ -22,11 +22,34 @@ metadata:
 spec:
   template: metric
   params:
-    value: request.size | 0
+    value: request.headers["accept-encoding"] | "unknown"
     dimensions:
       response_code: "200"
 ---
-
+apiVersion: "config.istio.io/v1alpha2"
+kind: instance
+metadata:
+  name: i2metric
+  namespace: istio-system
+spec:
+  template: metric
+  params:
+    value: request.headers["user-agent"] | "unknown"
+    dimensions:
+      response_code: "200"
+---
+apiVersion: "config.istio.io/v1alpha2"
+kind: instance
+metadata:
+  name: i3metric
+  namespace: istio-system
+spec:
+  template: metric
+  params:
+    value: source.workload.name | "unknown"
+    dimensions:
+      response_code: "200"
+---
 # rule to dispatch to handler h1
 apiVersion: "config.istio.io/v1alpha2"
 kind: rule
@@ -36,7 +59,9 @@ metadata:
 spec:
   match: source.workload.name == "istio-ingressgateway" && context.reporter.kind == "outbound"
   actions:
-    - handler: h1.istio-system
-      instances:
-        - i1metric
+  - handler: h1.istio-system
+    instances:
+    - i1metric
+    - i2metric
+    - i3metric
 ---
