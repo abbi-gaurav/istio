@@ -34,6 +34,7 @@ metadata:
   name: r1
   namespace: istio-system
 spec:
+  match: source.workload.name == "istio-ingressgateway" && context.reporter.kind == "outbound"
   actions:
     - handler: h1.istio-system
       instances:

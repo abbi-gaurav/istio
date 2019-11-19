@@ -59,7 +59,7 @@ var _ metric.HandleMetricServiceServer = &MyGrpcAdapter{}
 // HandleMetric records metric entries
 func (s *MyGrpcAdapter) HandleMetric(ctx context.Context, r *metric.HandleMetricRequest) (*v1beta1.ReportResult, error) {
 
-	fmt.Printf("received request %v\n", *r)
+	fmt.Printf("received request %+v\n", *r)
 	var b bytes.Buffer
 	cfg := &config.Params{}
 
@@ -73,25 +73,7 @@ func (s *MyGrpcAdapter) HandleMetric(ctx context.Context, r *metric.HandleMetric
 	b.WriteString(fmt.Sprintf("HandleMetric invoked with:\n  Adapter config: %s\n  Instances: %s\n",
 		cfg.String(), instances(r.Instances)))
 
-	if cfg.FilePath == "" {
-		fmt.Println(b.String())
-	} else {
-		_, err := os.OpenFile("out.txt", os.O_RDONLY|os.O_CREATE, 0666)
-		if err != nil {
-			fmt.Printf("error creating file: %v", err)
-		}
-		f, err := os.OpenFile(cfg.FilePath, os.O_APPEND|os.O_WRONLY, 0600)
-		if err != nil {
-			fmt.Printf("error opening file for append: %v", err)
-		}
-
-		defer f.Close()
-
-		fmt.Printf("writing instances to file %s", f.Name())
-		if _, err = f.Write(b.Bytes()); err != nil {
-			fmt.Printf("error writing to file: %v", err)
-		}
-	}
+	fmt.Println(b.String())
 
 	fmt.Printf("success!!")
 	return &v1beta1.ReportResult{}, nil
@@ -114,7 +96,7 @@ func decodeValue(in interface{}) interface{} {
 	case *policy.Value_DoubleValue:
 		return t.DoubleValue
 	default:
-		return fmt.Sprintf("%v", in)
+		return fmt.Sprintf("%+v", in)
 	}
 }
 

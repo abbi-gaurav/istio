@@ -73,3 +73,11 @@ Install a custom Istio adapter to a Kyma cluster.
     ```shell script
     kubectl -n istio-system logs -l app=mygrpcadapter
     ```
+
+## Versions
+
+| Version | Description                                                     |
+|---------|-----------------------------------------------------------------|
+| 0.0.1   | A working version installed on Kyma based on walk through guide |
+| 0.0.2   | Stop writing to a file. Only print to console                   |
+
