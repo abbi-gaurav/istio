@@ -25,6 +25,7 @@ spec:
     value: request.headers["my-passport"] | "unknown"
     dimensions:
       response_code: "200"
+      header_name: toLower("my-passport")
 ---
 apiVersion: "config.istio.io/v1alpha2"
 kind: instance
@@ -37,6 +38,7 @@ spec:
     value: request.headers["x-b3-traceid"] | "unknown"
     dimensions:
       response_code: "200"
+      header_name: toLower("x-b3-traceid")
 ---
 apiVersion: "config.istio.io/v1alpha2"
 kind: instance
@@ -49,6 +51,7 @@ spec:
     value: source.workload.name | "unknown"
     dimensions:
       response_code: "200"
+      header_name: toLower("source.workload.name")
 ---
 # rule to dispatch to handler h1
 apiVersion: "config.istio.io/v1alpha2"
