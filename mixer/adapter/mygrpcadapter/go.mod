@@ -3,6 +3,7 @@ module istio.io/istio/mixer/adapter/mygrpcadapter
 go 1.13
 
 require (
+	github.com/go-redis/redis/v7 v7.0.0-beta.4
 	github.com/gogo/protobuf v1.3.1
 	golang.org/x/net v0.0.0-20191112182307-2180aed22343 // indirect
 	golang.org/x/sys v0.0.0-20191113165036-4c7a9d0fe056 // indirect

@@ -16,16 +16,18 @@ package main
 
 import (
 	"fmt"
+	"istio.io/istio/mixer/adapter/mygrpcadapter/internal/db"
+	"istio.io/istio/mixer/adapter/mygrpcadapter/internal/options"
 	"os"
+	"strconv"
 
 	"istio.io/istio/mixer/adapter/mygrpcadapter"
 )
 
 func main() {
-	addr := ""
-	if len(os.Args) > 1 {
-		addr = os.Args[1]
-	}
+	options.ParseFlags()
+	db.New()
+	addr := strconv.FormatInt(options.GlobalConfig.Port,10)
 
 	s, err := mygrpcadapter.NewMyGrpcAdapter(addr)
 	if err != nil {

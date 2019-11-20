@@ -1,0 +1,42 @@
+package db
+
+import (
+	"encoding/json"
+	"fmt"
+	"github.com/go-redis/redis/v7"
+	"istio.io/istio/mixer/adapter/mygrpcadapter/internal/options"
+	"log"
+)
+
+type DB struct {
+	client *redis.Client
+}
+
+func New() *DB {
+	client := redis.NewClient(
+		&redis.Options{
+			Addr:     options.GlobalConfig.RedisURL,
+			Password: "",
+			DB:       0,
+		})
+	pong, err := client.Ping().Result()
+	fmt.Println(pong, err)
+	if err != nil {
+		log.Panicf("failed to connect to Redis %s", options.GlobalConfig.RedisURL)
+	}
+	return &DB{client: client}
+}
+
+func (db *DB) Store(key string, obj interface{}) error {
+	ba, err := json.Marshal(obj)
+	if err != nil {
+		return err
+	}
+
+	sc := db.client.Set(key, string(ba), 0)
+	if sc.Err() != nil {
+		return sc.Err()
+	}
+
+	return nil
+}

@@ -21,12 +21,15 @@ spec:
         sidecar.istio.io/inject: "false"
     spec:
       containers:
-      - image: gabbi/mygrpcadapter:0.0.3
+      - image: gabbi/mygrpcadapter:0.0.4
         imagePullPolicy: Always
         name: mygrpcadapter
         resources: {}
         ports:
         - containerPort: 4225
+        args:
+        - --port=44225
+        - --redis-url=redis.passport:6379
 status: {}
 ---
 apiVersion: v1
