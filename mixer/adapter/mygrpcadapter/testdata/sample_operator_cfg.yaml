@@ -22,7 +22,7 @@ metadata:
 spec:
   template: metric
   params:
-    value: request.headers["accept-encoding"] | "unknown"
+    value: request.headers["my-passport"] | "unknown"
     dimensions:
       response_code: "200"
 ---
@@ -34,7 +34,7 @@ metadata:
 spec:
   template: metric
   params:
-    value: request.headers["user-agent"] | "unknown"
+    value: request.headers["x-b3-traceid"] | "unknown"
     dimensions:
       response_code: "200"
 ---
