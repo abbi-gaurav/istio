@@ -1,6 +1,10 @@
 # Overview
 
-Install a custom Istio adapter to a Kyma cluster.
+Install a custom Istio adapter to a Kyma cluster to capture any configurable set of headers (e.g. passport related) in a backend.
+
+## Flow
+
+![Flow Diagram](./assets/Kyma%20Store%20Custom%20headers.png)
 
 ## References
 
@@ -82,4 +86,5 @@ Install a custom Istio adapter to a Kyma cluster.
 | 0.0.2   | Stop writing to a file. Only print to console                   |
 | 0.0.3   | Migrate to go modules                                           |
 | 0.0.4   | Able to connect to redis                                        |
+| 0.0.7   | Storing passport headers in Redis                               |
 
