@@ -21,7 +21,7 @@ spec:
         sidecar.istio.io/inject: "false"
     spec:
       containers:
-      - image: gabbi/mygrpcadapter:0.0.4
+      - image: gabbi/mygrpcadapter:0.0.7
         imagePullPolicy: Always
         name: mygrpcadapter
         resources: {}
@@ -30,6 +30,9 @@ spec:
         args:
         - --port=44225
         - --redis-url=redis.passport:6379
+        - --passport-headers=my-passport,x-b3-traceid
+        - --storage-key-name=x-b3-traceid
+        - dimensions-key=header_name
 status: {}
 ---
 apiVersion: v1

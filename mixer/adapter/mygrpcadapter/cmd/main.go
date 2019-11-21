@@ -16,8 +16,8 @@ package main
 
 import (
 	"fmt"
-	"istio.io/istio/mixer/adapter/mygrpcadapter/internal/db"
 	"istio.io/istio/mixer/adapter/mygrpcadapter/internal/options"
+	"istio.io/istio/mixer/adapter/mygrpcadapter/internal/passport_service"
 	"os"
 	"strconv"
 
@@ -26,10 +26,11 @@ import (
 
 func main() {
 	options.ParseFlags()
-	db.New()
-	addr := strconv.FormatInt(options.GlobalConfig.Port,10)
+	ps := passport_service.New()
 
-	s, err := mygrpcadapter.NewMyGrpcAdapter(addr)
+	addr := strconv.FormatInt(options.GlobalConfig.Port, 10)
+
+	s, err := mygrpcadapter.NewMyGrpcAdapter(addr, ps)
 	if err != nil {
 		fmt.Printf("unable to start server: %v", err)
 		os.Exit(-1)

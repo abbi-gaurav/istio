@@ -21,12 +21,12 @@ Install a custom Istio adapter to a Kyma cluster.
     ```
 
 ## Install on a Kyma cluster
-* Change the image value in [deployment](./deployment/deployment.yaml).
+* Change the image value in [deployment](deployment/mygrpcadapter.yaml).
 
 * Deploy adapter as a k8s service.
 
     ```shell script
-    kubectl apply -f deployment/deployment.yaml
+    kubectl apply -f mygrpcadapter.yaml
     ```
 
 * Setup the attributes maps and deploy

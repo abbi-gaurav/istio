@@ -1,16 +1,4 @@
-// Copyright 2018 Istio Authors
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+// Istio adapter used along with open source project Kyma
 
 // nolint:lll
 // Generates the mygrpcadapter adapter's resource yaml. It contains the adapter's configuration, name, supported template
@@ -25,6 +13,7 @@ import (
 	"crypto/x509"
 	"fmt"
 	"io/ioutil"
+	"istio.io/istio/mixer/adapter/mygrpcadapter/internal/passport_service"
 	"net"
 
 	"google.golang.org/grpc"
@@ -49,8 +38,9 @@ type (
 
 	// MyGrpcAdapter supports metric template.
 	MyGrpcAdapter struct {
-		listener net.Listener
-		server   *grpc.Server
+		listener        net.Listener
+		server          *grpc.Server
+		passportService *passport_service.PassportService
 	}
 )
 
@@ -72,6 +62,7 @@ func (s *MyGrpcAdapter) HandleMetric(ctx context.Context, r *metric.HandleMetric
 
 	b.WriteString(fmt.Sprintf("HandleMetric invoked with:\n  Adapter config: %s\n  Instances: %s\n",
 		cfg.String(), instances(r.Instances)))
+	s.passportService.ExtractAndStorePassportAttributes(r.Instances)
 
 	fmt.Println(b.String())
 
@@ -164,7 +155,7 @@ func getServerTLSOption(credential, privateKey, caCertificate string) (grpc.Serv
 }
 
 // NewMyGrpcAdapter creates a new IBP adapter that listens at provided port.
-func NewMyGrpcAdapter(addr string) (Server, error) {
+func NewMyGrpcAdapter(addr string, ps *passport_service.PassportService) (Server, error) {
 	if addr == "" {
 		addr = "0"
 	}
@@ -173,7 +164,8 @@ func NewMyGrpcAdapter(addr string) (Server, error) {
 		return nil, fmt.Errorf("unable to listen on socket: %v", err)
 	}
 	s := &MyGrpcAdapter{
-		listener: listener,
+		listener:        listener,
+		passportService: ps,
 	}
 	fmt.Printf("listening on \"%v\"\n", s.Addr())
 

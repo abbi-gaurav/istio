@@ -34,8 +34,9 @@ func (db *DB) Store(key string, obj interface{}) error {
 	}
 
 	sc := db.client.Set(key, string(ba), 0)
-	if sc.Err() != nil {
-		return sc.Err()
+	if err = sc.Err(); err != nil {
+		log.Printf("Got err while saving %+v", err)
+		return err
 	}
 
 	return nil

@@ -1,4 +1,4 @@
-RELEASE?=0.0.4
+RELEASE?=0.0.7
 APP?=mygrpcadapter
 GOOS?=darwin
 GOARCH?=amd64
