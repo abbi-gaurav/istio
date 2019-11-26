@@ -1,4 +1,4 @@
-RELEASE?=0.0.7
+RELEASE?=0.0.8
 APP?=mygrpcadapter
 GOOS?=darwin
 GOARCH?=amd64
@@ -22,3 +22,6 @@ build-image: build
 
 push-image: build-image
 	docker push $(CONTAINER_IMAGE):$(RELEASE)
+
+tidy:
+	GO111MODULE=on go mod tidy

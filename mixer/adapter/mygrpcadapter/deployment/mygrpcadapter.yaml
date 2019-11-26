@@ -21,7 +21,7 @@ spec:
         sidecar.istio.io/inject: "false"
     spec:
       containers:
-      - image: gabbi/mygrpcadapter:0.0.7
+      - image: gabbi/mygrpcadapter:0.0.8
         imagePullPolicy: Always
         name: mygrpcadapter
         resources: {}

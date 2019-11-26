@@ -1,0 +1,10 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: redis
+  namespace: passport
+spec:
+  host: "redis.passport.svc.cluster.local"
+  trafficPolicy:
+    tls:
+      mode: DISABLE
