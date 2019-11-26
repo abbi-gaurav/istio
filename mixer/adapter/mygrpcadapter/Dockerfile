@@ -1,0 +1,21 @@
+FROM golang:1.13 as builder
+
+ENV GO111MODULE=on
+
+WORKDIR /app
+COPY . .
+
+RUN go mod download
+
+RUN CGO_ENABLED=0 GOOS=linux \
+    go build -a -installsuffix cgo -v -o bin/myauthadapter ./cmd/
+
+FROM alpine:3.8
+RUN apk --no-cache add ca-certificates
+
+WORKDIR /bin/
+
+COPY --from=builder /app/bin/myauthadapter .
+ENTRYPOINT [ "/bin/myauthadapter" ]
+CMD [ "44225" ]
+EXPOSE 44225
