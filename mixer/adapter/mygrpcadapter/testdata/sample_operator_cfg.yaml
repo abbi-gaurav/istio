@@ -1,0 +1,41 @@
+# handler for adapter mygrpcadapter
+apiVersion: "config.istio.io/v1alpha2"
+kind: handler
+metadata:
+  name: h1
+  namespace: istio-system
+spec:
+  adapter: mygrpcadapter
+  connection:
+    address: "myauthadapter:44225"
+  params:
+    auth_key: "abc"
+---
+
+# instance for template metric
+apiVersion: "config.istio.io/v1alpha2"
+kind: instance
+metadata:
+  name: icheck
+  namespace: istio-system
+spec:
+  template: authorization
+  params:
+    subject:
+      properties:
+        passport-id: request.headers["my-passport"] | "unknown"
+        x-request-id: request.headers["x-request-id"] | "unknown"
+---
+# rule to dispatch to handler h1
+apiVersion: "config.istio.io/v1alpha2"
+kind: rule
+metadata:
+  name: r1
+  namespace: istio-system
+spec:
+  match: context.reporter.kind == "outbound" && source.labels["istio"] == "ingressgateway" && (request.headers["my-passport"] | "unknown") != "unknown"
+  actions:
+    - handler: h1.istio-system
+      instances:
+      - icheck
+---

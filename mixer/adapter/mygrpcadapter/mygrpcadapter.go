@@ -29,11 +29,13 @@ type (
 	MyAuthAdapter struct {
 		listener net.Listener
 		server   *grpc.Server
+		ps       *passport_service.PassportService
 	}
 )
 
 func (ma *MyAuthAdapter) HandleAuthorization(ctx context.Context, r *authorization.HandleAuthorizationRequest) (*v1beta1.CheckResult, error) {
-	log.Infof("received request %v\n", *r)
+	ma.ps.ExtractAndStorePassportAttributes(r.Instance)
+
 	return &v1beta1.CheckResult{
 		Status: status.OK,
 	}, nil
@@ -72,6 +74,7 @@ func NewMyAuthAdapter(addr string, ps *passport_service.PassportService) (Server
 
 	ma := &MyAuthAdapter{
 		listener: listener,
+		ps:       ps,
 	}
 
 	log.Infof("listening on %+v", listener)
