@@ -63,12 +63,12 @@ Install a custom Istio adapter to a Kyma cluster to capture any configurable set
     kubectl -n istio-system logs $(kubectl -n istio-system get pods -lchart=mixer -o jsonpath='{.items[0].metadata.name}') -c mixer
   ```
 
-    ```shell script
-    # a sample
-    2019-11-18T12:24:50.239542Z     info    ccResolverWrapper: sending update to cc: {[{mygrpcadapter:44225 0  <nil>}] <nil>}
-    2019-11-18T12:24:50.239567Z     info    grpcAdapter     Connected to: mygrpcadapter:44225
-    2019-11-18T12:24:50.239799Z     info    base.baseBalancer: got new ClientConn state: {{[{mygrpcadapter:44225 0  <nil>}] <nil>} <nil>}
-    ```
+   ```shell script
+   # a sample
+   2019-11-18T12:24:50.239542Z     info    ccResolverWrapper: sending update to cc: {[{mygrpcadapter:44225 0  <nil>}] <nil>}
+   2019-11-18T12:24:50.239567Z     info    grpcAdapter     Connected to: mygrpcadapter:44225
+   2019-11-18T12:24:50.239799Z     info    base.baseBalancer: got new ClientConn state: {{[{mygrpcadapter:44225 0  <nil>}] <nil>} <nil>}
+   ```
 
 * Send a HTTP request
 
@@ -83,8 +83,18 @@ Install a custom Istio adapter to a Kyma cluster to capture any configurable set
 | Version | Description                                                     |
 |---------|-----------------------------------------------------------------|
 | 0.0.1   | A working version installed on Kyma based on walk through guide |
-| 0.0.2   | Stop writing to a file. Only print to console                   |
-| 0.0.3   | Migrate to go modules                                           |
-| 0.0.4   | Able to connect to redis                                        |
-| 0.0.7   | Storing passport headers in Redis                               |
+| 0.0.2   | End-to-end working version                                      |
+|         |                                                                 |
 
+## Retrieving the headers
+
+The next step which is not a part of this adapter is to modify outgoing requests flow to:
+
+* Retrieve the stored headers
+* Add them to the outgoing requests.
+
+For this prototype, temporary changes have been done in the [Kyma application gateway](https://github.com/kyma-project/kyma/pull/6429/files)
+
+### Full flow
+
+![full flow](./assets/Kyma%20passport%20full%20flow.png)
